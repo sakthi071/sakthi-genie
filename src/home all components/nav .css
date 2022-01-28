@@ -1,0 +1,19 @@
+img{
+    height: 2.5rem;
+    
+    
+
+}
+.gh{
+    padding: .7rem;
+    
+}
+.paraWithUnderline{
+    
+        border-bottom: 2px solid white;
+     
+}
+small{
+    border-bottom: 1px solid white;
+    margin: 6px;
+}
