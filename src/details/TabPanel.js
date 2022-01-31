@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import Cardfile from './Cardfile';
 import { Spin } from 'antd';
+import Footer from './Footer';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,6 +48,7 @@ export default function VerticalTabs() {
   const [categoriesTotaldata, setcategoriesTotaldata] = useState([]);
   const [removeDups, setremoveDups] = useState([]);
   const [contentFilter, setContentFilter] = useState([]);
+  const [calculator, setCalculator] = useState([]);
 
   useEffect(() => {
     let getData = async () => {
@@ -73,13 +75,29 @@ export default function VerticalTabs() {
     }
     getData();
 
-  }, [])
+  }, []);
+  const handleCalc = (jobFromData, priceFromData, ratingFromData, descriptionFromData)=>{
+    let newObj = calculator;
+    if(newObj[jobFromData]){
+      newObj[jobFromData] += parseInt(priceFromData)  
+     }else{
+      newObj[jobFromData] = parseInt(priceFromData)
+     }
+     setCalculator(newObj);
+     console.log(calculator)
+   
+  }
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
+<>
+    {contentFilter.length ? 
+    (
+      <>
     <Box
       sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 500 }}
     >
@@ -102,13 +120,19 @@ export default function VerticalTabs() {
               <Tab label="Item Seven" {...a11yProps(6)} /> */}
       </Tabs>
       <TabPanel value={value} index={0}>
-        {contentFilter.length ? (contentFilter.map(e => (
-          <Cardfile jobFromData={e.job} priceFromData={e.price} ratingFromData={e.rating} descriptionFromData={e.description} />
+        {contentFilter.map(e => (
+          <Cardfile calcSet={handleCalc} jobFromData={e.job} priceFromData={e.price} ratingFromData={e.rating} descriptionFromData={e.description} />
 
-        ))) : (<Spin />)}
+        ))}
       </TabPanel>
 
 
     </Box>
+    <div style={{display:"flex",justifyContent:"end"}}>
+    <Footer calcView={handleCalc} listAddItems={"Total Price"}/>
+    </div>
+    </>
+  ) : (<Spin/>)}
+    </>
   );
 }
